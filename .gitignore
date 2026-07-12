@@ -225,3 +225,7 @@ venv/
 *.env
 secrets.json
 __pycache__/
+
+
+# Local FAISS Storage
+artifacts/
