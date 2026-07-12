@@ -229,3 +229,7 @@ __pycache__/
 
 # Local FAISS Storage
 artifacts/
+
+# Project custom logs folder
+logs/
+*.log
