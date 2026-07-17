@@ -233,3 +233,24 @@ artifacts/
 # Project custom logs folder
 logs/
 *.log
+
+
+
+# =====================================================================
+# 🚨 AUTONOMOUS DB AGENT - EXTRA SECURITY RULES
+# =====================================================================
+
+# 📦 Local Runtime SQL Databases (Strict Validation)
+*.db
+*.db-journal
+*.sqlite
+database.db
+
+# 🧪 Project Metadata Builds & Package Info (Untracked side-folders)
+*.egg-info/
+query_doc_agent.egg-info/
+.egg-info/
+
+
+# Local testing script
+test_agent.py
