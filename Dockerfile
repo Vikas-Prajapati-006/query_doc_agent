@@ -2,11 +2,10 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Security Patch: Keep system packages updated and install essential tools
+# Security Patch: Keep system packages updated and install essential tools (Removed software-properties-common)
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
-    software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
 # Layer Optimization: First install requirements to utilize cache
