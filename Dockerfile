@@ -18,7 +18,7 @@ RUN python -c "from langchain_huggingface import HuggingFaceEmbeddings; HuggingF
 COPY . .
 
 
-RUN python upload_data.py
+RUN python src/components/upload_data.py
 
 EXPOSE 8501
 
