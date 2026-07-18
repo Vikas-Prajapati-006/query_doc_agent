@@ -252,5 +252,3 @@ query_doc_agent.egg-info/
 .egg-info/
 
 
-# Local testing script
-test_agent.py
