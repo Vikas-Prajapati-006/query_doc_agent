@@ -8,9 +8,12 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Layer Optimization: First install requirements to utilize cache
+# Layer Optimization: First copy requirements to utilize cache
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+# Fix: Docker build ke time requirements.txt se '-e .' temporary remove kar rahe hain
+# Isse local setup.py file ka conflict deployment par nahi aayega
+RUN sed -i '/-e ./d' requirements.txt && pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code (excluding files explicitly blocked in .dockerignore)
 COPY . .
