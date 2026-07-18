@@ -1,4 +1,25 @@
 # app1.py
+
+import os
+import sys
+import logging
+
+
+if "RENDER" in os.environ:
+    sys.stdout.reconfigure(line_buffering=True)
+    sys.stderr.reconfigure(line_buffering=True)
+    logging.basicConfig(
+        stream=sys.stdout,
+        level=logging.INFO,
+        format="⏩ %(asctime)s - [%(name)s] - %(levelname)s - %(message)s",
+        force=True
+    )
+    logging.getLogger("Render_Boot").info("Render environment detected. Live buffering active.")
+else:
+    
+    logging.basicConfig(level=logging.INFO)
+
+
 import streamlit as st
 import pandas as pd
 from src.pipeline.agent_pipeline import app_pipeline
