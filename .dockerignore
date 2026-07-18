@@ -1,0 +1,26 @@
+# Sensitive and Environment Files (Leakage Prevention)
+.env
+*.db
+database.db
+secrets/
+
+# Local Environment and Virtual Envs
+.venv/
+venv/
+env/
+
+# Python caching and metadata
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+query_doc_agent.egg-info/
+
+# Git metadata
+.git/
+.gitignore
+
+# Application Internal Logs
+logs/
+*.log
