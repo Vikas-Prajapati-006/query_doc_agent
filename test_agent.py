@@ -115,19 +115,15 @@ else:
 conn.close()
 print("=== Dummy Test DB Checked/Created with Full Scale Matrix ===")
 
-# 2. Setup Simple Agent State Input
-sample_initial_state = {
-    "raw_input": "Show me all records from the products table please"
-}
-
-# 🛠️ Configuration matrix linking thread session keys for LangGraph Memory Checkpointer
-# Updated thread_id to a professional production-grade naming convention
-test_config = {"configurable": {"thread_id": "db_agent_prod_session_01"}}
-
-print("=== Running LangGraph Pipeline Test ===")
-# Pass the persistent configuration dict alongside initial state params
-final_output_state = app_pipeline.invoke(sample_initial_state, config=test_config)
-
-print("\n=== Test Completed! Final Agent State Results: ===")
-print(f"Intent Vector Detected: {final_output_state.get('intent')}")
-print(f"Generated Vector Query: {final_output_state.get('generated_command')}")
+# --- PIPELINE INGESTION BYPASS FOR PRODUCTION CONTAINER BOOT ---
+# Niche ke test execution logic ko production mein load hone se bacha diya hai taaki RAM crash na ho.
+#
+# sample_initial_state = {
+#     "raw_input": "Show me all records from the products table please"
+# }
+# test_config = {"configurable": {"thread_id": "db_agent_prod_session_01"}}
+# print("=== Running LangGraph Pipeline Test ===")
+# final_output_state = app_pipeline.invoke(sample_initial_state, config=test_config)
+# print("\n=== Test Completed! Final Agent State Results: ===")
+# print(f"Intent Vector Detected: {final_output_state.get('intent')}")
+# print(f"Generated Vector Query: {final_output_state.get('generated_command')}")
