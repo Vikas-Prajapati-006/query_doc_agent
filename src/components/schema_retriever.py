@@ -80,6 +80,13 @@
 import os
 import sys
 import logging
+
+# -------------------------------------------------------------
+# 🛑 Hugging Face Online Version Check Bilkul Block Karo
+# -------------------------------------------------------------
+os.environ["HF_HUB_OFFLINE"] = "1"
+os.environ["TRANSFORMERS_OFFLINE"] = "1"
+
 from typing import Dict, Any
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
@@ -92,7 +99,7 @@ from src.constant.database import DB_FAISS_INDEX_DIR
 logger = logging.getLogger(__name__)
 
 # -------------------------------------------------------------
-# 💡 ADDED ONLY THIS: Global memory cache to prevent duplicate loads
+# 💡 Global memory cache to prevent duplicate loads
 # -------------------------------------------------------------
 _CACHED_EMBEDDINGS = None
 _CACHED_VECTOR_STORE = None
@@ -110,7 +117,11 @@ class SchemaRetrieverComponent:
             # --- ORIGINAL MODEL LOADING WITH CACHE CHECK ---
             if _CACHED_EMBEDDINGS is None:
                 logger.info("[SchemaRetriever] Loading HuggingFace embedding model...")
-                _CACHED_EMBEDDINGS = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+                _CACHED_EMBEDDINGS = HuggingFaceEmbeddings(
+                    model_name="all-MiniLM-L6-v2",
+                    model_kwargs={'device': 'cpu'},
+                    encode_kwargs={'normalize_embeddings': False}
+                )
             self.embeddings = _CACHED_EMBEDDINGS
 
             # --- ORIGINAL FAISS LOADING WITH CACHE CHECK ---
