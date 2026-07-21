@@ -1,9 +1,9 @@
-# app1.py
+# app.py
 
 import os
 import sys
 import logging
-
+import subprocess
 
 if "RENDER" in os.environ:
     sys.stdout.reconfigure(line_buffering=True)
@@ -16,8 +16,40 @@ if "RENDER" in os.environ:
     )
     logging.getLogger("Render_Boot").info("Render environment detected. Live buffering active.")
 else:
-    
     logging.basicConfig(level=logging.INFO)
+
+
+# =====================================================================
+# 🚀 AUTO-INITIALIZATION LOGIC FOR FAISS INDEX & DATABASE SEEDING
+# =====================================================================
+from src.constant.database import DB_FAISS_INDEX_DIR
+
+# 1. Check & Auto-Generate FAISS Index
+if not os.path.exists(DB_FAISS_INDEX_DIR):
+    logging.info("⚡ FAISS Index directory missing. Triggering DataIngestion pipeline...")
+    try:
+        from src.components.upload_data import DataIngestion
+        ingestion_engine = DataIngestion()
+        ingestion_engine.initiate_data_ingestion()
+        logging.info("✅ FAISS Index successfully generated at boot time.")
+    except Exception as e:
+        logging.error(f"❌ Failed to auto-generate FAISS Index: {e}")
+
+# 2. Check & Auto-Seed SQLite Database via Subprocess if test_agent.py exists
+if not os.path.exists("database.db"):
+    logging.info("⚡ SQLite 'database.db' missing. Initializing database seeding...")
+    try:
+        if os.path.exists("test_agent.py"):
+            result = subprocess.run([sys.executable, "test_agent.py"], capture_output=True, text=True)
+            if result.returncode == 0:
+                logging.info("✅ Database schema created and seeded successfully via test_agent.py.")
+            else:
+                logging.error(f"❌ Database Seeding Failed: {result.stderr}")
+        else:
+            logging.warning("⚠️ test_agent.py not found in root directory. Checking component setup...")
+    except Exception as e:
+        logging.error(f"❌ Failed to auto-initialize Database: {e}")
+# =====================================================================
 
 
 import streamlit as st
@@ -66,7 +98,6 @@ with control_pane:
 
 with monitor_pane:
     st.subheader("🖥️ Live Execution Engine Stream")
-    
     
     active_state = None
     trigger_process = False
@@ -120,7 +151,7 @@ with monitor_pane:
                     
                     if "hitl_gate" in active_breakpoint:
                         if latency > 0.001 or intent == "INDEX_OPTIMIZATION": 
-                            st.error(f"🚨 **CRITICAL PERFORMANCE BOTTLENECK:** Sequential dataset scan recorded processing latency threshold branch updates.")
+                            st.error("🚨 **CRITICAL PERFORMANCE BOTTLENECK:** Sequential dataset scan recorded processing latency threshold branch updates.")
                         
                         st.markdown("---")
                         st.warning("⚠️ **CRITICAL SECURITY GUARD ACCELERATING:** An optimization statement requires admin level approval before execution.")
