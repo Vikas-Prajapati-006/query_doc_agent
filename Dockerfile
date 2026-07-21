@@ -15,10 +15,8 @@ RUN python -c "from langchain_huggingface import HuggingFaceEmbeddings; HuggingF
 
 COPY . .
 
-
 RUN PYTHONPATH=. python src/components/upload_data.py
 
 EXPOSE 8501
 
-
-CMD ["sh", "-c", "PYTHONPATH=. python test_agent.py && streamlit run app.py --server.port=8501 --server.address=0.0.0.0 --server.fileWatcherType=none"]
+CMD ["sh", "-c", "PYTHONPATH=. python test_agent.py && PYTHONPATH=. python -c 'from src.components.schema_retriever import SchemaRetrieverComponent; SchemaRetrieverComponent()' && streamlit run app.py --server.port=8501 --server.address=0.0.0.0 --server.fileWatcherType=none"]
