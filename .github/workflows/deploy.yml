@@ -19,25 +19,19 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Lightning CLI
+      - name: Install Lightning CLI & Add to PATH
         run: |
           python -m pip install --upgrade pip
           pip install lightning
+          
+          # Get Python binary directory and append directly to GitHub PATH
+          BIN_DIR=$(python -c "import sysconfig; print(sysconfig.get_path('scripts'))")
+          echo "$BIN_DIR" >> $GITHUB_PATH
 
       - name: Authenticate and Deploy
         env:
           LIGHTNING_API_KEY: ${{ secrets.LIGHTNING_API_KEY }}
         run: |
-          python -c "import os, sys; from lightning_sdk import LightningClient; print('Lightning SDK loaded')" || true
-          
-          # Find exact path of lightning binary in active environment
-          LIGHTNING_BIN=$(which lightning || find /opt/hostedtoolcache/Python -name lightning -type f 2>/dev/null | head -n 1)
-          
-          if [ -z "$LIGHTNING_BIN" ]; then
-            echo "Lightning CLI binary not found!"
-            exit 1
-          fi
-          
-          echo "Using binary at: $LIGHTNING_BIN"
-          "$LIGHTNING_BIN" login --api-key $LIGHTNING_API_KEY
-          "$LIGHTNING_BIN" deploy .
+          lightning --version
+          lightning login --api-key $LIGHTNING_API_KEY
+          lightning deploy .
