@@ -26,10 +26,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install lightning lightning-sdk
 
-          # Directly execute the binary from python's bin directory in SAME step
           PYTHON_BIN_DIR=$(python -c "import sysconfig; print(sysconfig.get_path('scripts'))")
-          echo "Binary path is: $PYTHON_BIN_DIR"
           
-          # Login and Deploy directly using absolute binary path
-          "$PYTHON_BIN_DIR/lightning" login --api-key $LIGHTNING_API_KEY
+          # Pass API Key directly as argument (Correct Syntax for Lightning CLI)
+          "$PYTHON_BIN_DIR/lightning" login $LIGHTNING_API_KEY
           "$PYTHON_BIN_DIR/lightning" deploy .
