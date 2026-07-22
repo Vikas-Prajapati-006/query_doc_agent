@@ -24,12 +24,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install --no-cache-dir lightning lightning-sdk
           
-          # Install core requirements
           if [ -f requirements.txt ]; then
             pip install --no-cache-dir -r requirements.txt
           fi
           
-          # Install local package in editable mode so 'src' imports never fail
           if [ -f setup.py ]; then
             pip install -e .
           fi
@@ -50,4 +48,4 @@ jobs:
           BIN_DIR=$(python -c "import sysconfig; print(sysconfig.get_path('scripts'))")
           
           echo "Deploying Streamlit App to Lightning AI Cloud..."
-          "$BIN_DIR/lightning" deploy app app.py --name query-doc-agent || "$BIN_DIR/lightning" deploy app.py
+          "$BIN_DIR/lightning" deploy app.py --name query-doc-agent
