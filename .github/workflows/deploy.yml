@@ -1,0 +1,32 @@
+name: Deploy App to Lightning AI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Lightning CLI
+        run: |
+          python -m pip install --upgrade pip
+          pip install lightning
+
+      - name: Authenticate and Deploy
+        env:
+          LIGHTNING_API_KEY: ${{ secrets.LIGHTNING_API_KEY }}
+        run: |
+          lightning login --api-key $LIGHTNING_API_KEY
+          lightning deploy
