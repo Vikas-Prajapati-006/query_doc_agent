@@ -28,5 +28,5 @@ jobs:
         env:
           LIGHTNING_API_KEY: ${{ secrets.LIGHTNING_API_KEY }}
         run: |
-          lightning login --api-key $LIGHTNING_API_KEY
-          lightning deploy
+          python -m lightning login --api-key $LIGHTNING_API_KEY
+          python -m lightning deploy
